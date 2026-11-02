@@ -67,12 +67,14 @@
             window.EJS_gameName = 'Super Mario Land';
             window.EJS_color = '#e74c3c';
             window.EJS_startOnLoaded = true;
-            window.EJS_pathtodata = 'https://cdn.emulatorjs.org/stable/data/';
             
+            // Aponta para a pasta local "data"
+            window.EJS_pathtodata = './data/';
             window.EJS_gameUrl = 'supermarioland.gb';
 
+            // Carrega o loader de forma local
             var script = document.createElement('script');
-            script.src = 'https://cdn.emulatorjs.org/stable/data/loader.js';
+            script.src = './data/loader.js';
             document.body.appendChild(script);
         }
     </script>
