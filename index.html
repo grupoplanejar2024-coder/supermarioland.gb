@@ -221,13 +221,13 @@
       gameCard.style.display = "none";
       gameContainer.style.display = "block";
 
-      // Configurações do EmulatorJS para caminhos locais (offline)
+    // Configuração apontando para o CDN oficial estável do EmulatorJS
       window.EJS_player = "#game";
       window.EJS_core = "gb";
       window.EJS_gameName = "Super Mario Land";
       window.EJS_color = "#e74c3c";
       window.EJS_startOnLoaded = true;
-      window.EJS_pathtodata = "./data/";
+      window.EJS_pathtodata = "https://cdn.emulatorjs.org/stable/data/";
       window.EJS_gameUrl = "./supermarioland.gb";
 
       window.EJS_onGameStart = () => {
@@ -235,7 +235,7 @@
       };
 
       const script = document.createElement("script");
-      script.src = "./data/loader.js";
+      script.src = "https://cdn.emulatorjs.org/stable/data/loader.js";
       script.onerror = () => {
         statusText.textContent = "Erro ao carregar os ficheiros locais do emulador.";
         playButton.disabled = false;
