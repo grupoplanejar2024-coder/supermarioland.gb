@@ -1,0 +1,20 @@
+{
+  "name": "Super Mario Land - Kubo Touch",
+  "short_name": "Kubo Touch",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#121212",
+  "theme_color": "#e74c3c",
+  "icons": [
+    {
+      "src": "gb_supermarioland.jpg",
+      "sizes": "192x192",
+      "type": "image/jpeg"
+    },
+    {
+      "src": "gb_supermarioland.jpg",
+      "sizes": "512x512",
+      "type": "image/jpeg"
+    }
+  ]
+}
