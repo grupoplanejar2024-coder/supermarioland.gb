@@ -1,187 +1,80 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Super Mario Land - Game Boy</title>
+    <title>Super Mario Land - Kubo Touch</title>
     <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
-        body, html {
-            width: 100%;
-            height: 100%;
-            background-color: #0d0f12;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            color: #ffffff;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            overflow-x: hidden;
-        }
-
-        /* Container principal */
-        .main-container {
-            width: 100%;
-            max-width: 900px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 15px;
-            gap: 20px;
-        }
-
-        /* Card de Informações e Capa */
-        .info-card {
-            width: 100%;
-            background: #181b20;
-            border-radius: 12px;
-            padding: 20px;
-            display: flex;
-            flex-direction: row;
-            gap: 20px;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.5);
-            border: 1px solid #2a2e35;
-        }
-
-        .cover-box {
-            flex: 0 0 160px;
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
-        }
-
-        .cover-box img {
-            width: 100%;
-            max-width: 160px;
-            height: auto;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.6);
-            object-fit: cover;
-        }
-
-        .details-box {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            gap: 8px;
-        }
-
-        .game-title {
-            font-size: 1.6rem;
-            font-weight: 700;
-            color: #ffcc00;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
-        }
-
-        .meta-info {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 12px;
-            font-size: 0.85rem;
-            color: #a0a6b2;
-        }
-
-        .meta-item {
-            background: #22262e;
-            padding: 4px 10px;
-            border-radius: 6px;
-            border: 1px solid #323742;
-        }
-
-        .game-description {
-            font-size: 0.9rem;
-            line-height: 1.4;
-            color: #d1d5db;
-            margin-top: 6px;
-        }
-
-        /* Área do Emulador */
-        .emulator-wrapper {
-            width: 100%;
-            height: 520px;
-            background: #000;
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.6);
-            border: 1px solid #2a2e35;
-        }
-
-        #game {
-            width: 100%;
-            height: 100%;
-        }
-
-        /* Responsividade para telas menores (celulares) */
-        @media (max-width: 600px) {
-            .info-card {
-                flex-direction: column;
-                align-items: center;
-                text-align: center;
-            }
-
-            .cover-box {
-                flex: none;
-                width: 140px;
-            }
-
-            .meta-info {
-                justify-content: center;
-            }
-
-            .emulator-wrapper {
-                height: 420px;
-            }
-        }
+        body, html { margin: 0; padding: 0; width: 100%; height: 100%; background-color: #121212; color: #fff; font-family: Arial, sans-serif; }
+        header { text-align: center; padding: 15px; background: #1e1e1e; }
+        .badge { background: #e74c3c; color: #fff; padding: 4px 12px; border-radius: 20px; font-weight: bold; font-size: 14px; }
+        #game-card { max-width: 500px; margin: 20px auto; background: #1e1e1e; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.5); }
+        .cover-container { width: 100%; height: 250px; background-image: url('gb_supermarioland.jpg'); background-size: cover; background-position: center; }
+        .content { padding: 20px; }
+        h1 { margin: 0 0 10px 0; font-size: 24px; color: #e74c3c; }
+        .meta-info { display: flex; gap: 10px; margin-bottom: 15px; font-size: 13px; color: #aaa; }
+        .description { font-size: 14px; line-height: 1.5; color: #ddd; margin-bottom: 15px; }
+        .details { font-size: 13px; color: #bbb; margin-bottom: 20px; }
+        .details ul { padding-left: 20px; margin: 0; }
+        .btn-play { display: block; width: 100%; padding: 12px; background: #c0392b; color: #fff; border: none; border-radius: 6px; font-weight: bold; font-size: 16px; cursor: pointer; text-align: center; text-decoration: none; }
+        .btn-play:hover { background: #a93226; }
+        #game-container { display: none; width: 100%; height: 100vh; }
+        #game { width: 100%; height: 100%; }
     </style>
 </head>
 <body>
 
-    <div class="main-container">
-        
-        <!-- Bloco de Informações + Capa -->
-        <div class="info-card">
-            <div class="cover-box">
-                <!-- Aponta diretamente para a imagem enviada no repositório -->
-                <img src="gb_supermarioland.jpg" alt="Super Mario Land Capa">
-            </div>
-            <div class="details-box">
-                <h1 class="game-title">Super Mario Land</h1>
-                <div class="meta-info">
-                    <span class="meta-item">🎮 Game Boy</span>
-                    <span class="meta-item">🏢 Nintendo</span>
-                    <span class="meta-item">📅 1989</span>
-                    <span class="meta-item">🕹️ Plataforma</span>
-                </div>
-                <p class="game-description">
-                    Junte-se a Mario em sua primeira aventura portátil pelo reino de Sarasaland para resgatar a Princesa Daisy do misterioso vilão Tatanga!
-                </p>
-            </div>
-        </div>
+    <header>
+        <span class="badge">KUBO TOUCH</span>
+    </header>
 
-        <!-- Tela do Emulador -->
-        <div class="emulator-wrapper">
-            <div id="game"></div>
-        </div>
+    <div id="game-card">
+        <div class="cover-container"></div>
+        <div class="content">
+            <h1>Super Mario Land</h1>
+            
+            <div class="meta-info">
+                <span>🎮 1 Jogador</span>
+                <span>📅 1989</span>
+                <span>🕹️ Nintendo</span>
+            </div>
 
+            <p class="description">
+                Junte-se a Mario em sua primeira aventura portátil pelo reino de Sarasaland para resgatar a Princesa Daisy do misterioso vilão Tatanga!
+            </p>
+
+            <div class="details">
+                <ul>
+                    <li><strong>🕹️ Gênero:</strong> Plataforma</li>
+                </ul>
+            </div>
+
+            <button class="btn-play" onclick="startEmulator()">JOGAR AGORA</button>
+        </div>
+    </div>
+
+    <div id="game-container">
+        <div id="game"></div>
     </div>
 
     <script type="text/javascript">
-        EJS_player = '#game';
-        EJS_core = 'gb';
-        EJS_gameName = 'Super Mario Land';
-        EJS_color = '#0066cc';
-        EJS_startOnLoaded = true;
-        EJS_pathtodata = 'https://cdn.emulatorjs.org/stable/data/';
-        
-        // Aponta para a ROM no repositório GitHub
-        EJS_gameUrl = 'supermarioland.gb';
-    </script>
-    <script src="https://cdn.emulatorjs.org/stable/data/loader.js"></script>
+        function startEmulator() {
+            document.getElementById('game-card').style.display = 'none';
+            document.getElementById('game-container').style.display = 'block';
 
+            window.EJS_player = '#game';
+            window.EJS_core = 'gb';
+            window.EJS_gameName = 'Super Mario Land';
+            window.EJS_color = '#e74c3c';
+            window.EJS_startOnLoaded = true;
+            window.EJS_pathtodata = 'https://cdn.emulatorjs.org/stable/data/';
+            
+            window.EJS_gameUrl = 'supermarioland.gb';
+
+            var script = document.createElement('script');
+            script.src = 'https://cdn.emulatorjs.org/stable/data/loader.js';
+            document.body.appendChild(script);
+        }
+    </script>
 </body>
 </html>
