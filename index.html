@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Super Mario Land - Game Boy</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body, html {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background-color: #000;
+            font-family: Arial, sans-serif;
+        }
+        #emulator-container {
+            width: 100vw;
+            height: 100vh;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="emulator-container">
+        <div id="game"></div>
+    </div>
+
+    <script type="text/javascript">
+        // Configurações do EmulatorJS para Game Boy (Super Mario Land)
+        EJS_player = '#game';
+        EJS_core = 'gb'; // Núcleo do Game Boy
+        EJS_gameName = 'Super Mario Land';
+        EJS_color = '#0066cc'; // Cor temática
+        EJS_startOnLoaded = true;
+        EJS_pathtodata = 'https://cdn.emulatorjs.org/stable/data/';
+        
+        // Substitua pelo caminho relativo ou URL onde está armazenada a ROM do seu jogo (.gb)
+        EJS_gameUrl = 'supermarioland.gb'; 
+    </script>
+    <script src="https://cdn.emulatorjs.org/stable/data/loader.js"></script>
+
+</body>
+</html>
