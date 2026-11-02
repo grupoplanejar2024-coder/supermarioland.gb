@@ -1,99 +1,295 @@
+
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Super Mario Land - Kubo Touch</title>
-    
-    <!-- Configurações PWA -->
-    <link rel="manifest" href="./manifest.json">
-    <meta name="theme-color" content="#e74c3c">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <link rel="apple-touch-icon" href="gb_supermarioland.jpg">
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1, viewport-fit=cover">
 
-    <style>
-        body, html { margin: 0; padding: 0; width: 100%; height: 100%; background-color: #121212; color: #fff; font-family: Arial, sans-serif; }
-        header { text-align: center; padding: 15px; background: #1e1e1e; }
-        .badge { background: #e74c3c; color: #fff; padding: 4px 12px; border-radius: 20px; font-weight: bold; font-size: 14px; }
-        #game-card { max-width: 500px; margin: 20px auto; background: #1e1e1e; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.5); }
-        .cover-container { width: 100%; height: 250px; background-image: url('gb_supermarioland.jpg'); background-size: cover; background-position: center; }
-        .content { padding: 20px; }
-        h1 { margin: 0 0 10px 0; font-size: 24px; color: #e74c3c; }
-        .meta-info { display: flex; gap: 10px; margin-bottom: 15px; font-size: 13px; color: #aaa; }
-        .description { font-size: 14px; line-height: 1.5; color: #ddd; margin-bottom: 15px; }
-        .details { font-size: 13px; color: #bbb; margin-bottom: 20px; }
-        .details ul { padding-left: 20px; margin: 0; }
-        .btn-play { display: block; width: 100%; padding: 12px; background: #c0392b; color: #fff; border: none; border-radius: 6px; font-weight: bold; font-size: 16px; cursor: pointer; text-align: center; text-decoration: none; }
-        .btn-play:hover { background: #a93226; }
-        #game-container { display: none; width: 100%; height: 100vh; }
-        #game { width: 100%; height: 100%; }
-    </style>
+  <title>Super Mario Land - Kubo Touch</title>
+  <meta name="theme-color" content="#e74c3c">
+  <meta name="description"
+        content="Jogue Super Mario Land no Kubo Touch.">
+
+  <link rel="manifest" href="./manifest.json">
+  <link rel="icon" href="./gb_supermarioland.jpg">
+  <link rel="apple-touch-icon" href="./gb_supermarioland.jpg">
+
+  <style>
+    :root {
+      color-scheme: dark;
+      --red: #e74c3c;
+      --bg: #121212;
+      --panel: #1e1e1e;
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      margin: 0;
+      min-height: 100%;
+      background: var(--bg);
+      color: #fff;
+      font-family: Arial, sans-serif;
+    }
+
+    body { min-height: 100dvh; }
+
+    header {
+      padding: 16px;
+      text-align: center;
+      background: var(--panel);
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 6px 14px;
+      border-radius: 20px;
+      background: var(--red);
+      font-size: 13px;
+      font-weight: bold;
+      letter-spacing: 1px;
+    }
+
+    #game-card {
+      max-width: 500px;
+      margin: 20px auto;
+      overflow: hidden;
+      border-radius: 12px;
+      background: var(--panel);
+      box-shadow: 0 4px 20px #0008;
+    }
+
+    .cover {
+      width: 100%;
+      height: 250px;
+      background: #222 url("./gb_supermarioland.jpg")
+                  center / contain no-repeat;
+    }
+
+    .content { padding: 20px; }
+
+    h1 {
+      margin: 0 0 12px;
+      color: var(--red);
+      font-size: 25px;
+    }
+
+    .meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 16px;
+      color: #aaa;
+      font-size: 13px;
+    }
+
+    .description {
+      color: #ddd;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    button {
+      min-height: 48px;
+      padding: 12px 16px;
+      border: 0;
+      border-radius: 8px;
+      background: var(--red);
+      color: white;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      touch-action: manipulation;
+    }
+
+    button:disabled {
+      opacity: .6;
+      cursor: wait;
+    }
+
+    .primary { width: 100%; }
+
+    #game-container {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 10;
+      background: #000;
+    }
+
+    #game {
+      width: 100%;
+      height: 100%;
+      min-height: 100dvh;
+    }
+
+    #game-toolbar {
+      position: absolute;
+      top: env(safe-area-inset-top, 0);
+      left: 0;
+      right: 0;
+      z-index: 20;
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      padding: 8px;
+      pointer-events: none;
+    }
+
+    #game-toolbar button {
+      min-height: 40px;
+      padding: 8px 12px;
+      font-size: 13px;
+      pointer-events: auto;
+    }
+
+    #status {
+      margin-top: 12px;
+      color: #bbb;
+      font-size: 13px;
+      text-align: center;
+    }
+
+    @media (max-width: 520px) {
+      #game-card { margin: 12px; }
+      .cover { height: 220px; }
+    }
+  </style>
 </head>
+
 <body>
+  <header>
+    <span class="badge">KUBO TOUCH</span>
+  </header>
 
-    <header>
-        <span class="badge">KUBO TOUCH</span>
-    </header>
+  <main id="game-card">
+    <div class="cover" role="img" aria-label="Super Mario Land"></div>
 
-    <div id="game-card">
-        <div class="cover-container"></div>
-        <div class="content">
-            <h1>Super Mario Land</h1>
-            
-            <div class="meta-info">
-                <span>🎮 1 Jogador</span>
-                <span>📅 1989</span>
-                <span>🕹️ Nintendo</span>
-            </div>
+    <section class="content">
+      <h1>Super Mario Land</h1>
 
-            <p class="description">
-                Junte-se a Mario em sua primeira aventura portátil pelo reino de Sarasaland para resgatar a Princesa Daisy do misterioso vilão Tatanga!
-            </p>
+      <div class="meta">
+        <span>🎮 1 jogador</span>
+        <span>📅 1989</span>
+        <span>🕹️ Game Boy</span>
+      </div>
 
-            <div class="details">
-                <ul>
-                    <li><strong>🕹️ Gênero:</strong> Plataforma</li>
-                </ul>
-            </div>
+      <p class="description">
+        Acompanhe Mario em sua aventura por Sarasaland para
+        resgatar a Princesa Daisy do vilão Tatanga.
+      </p>
 
-            <button class="btn-play" onclick="startEmulator()">JOGAR AGORA</button>
-        </div>
+      <button id="play-button" class="primary">
+        JOGAR AGORA
+      </button>
+
+      <p id="status" role="status">
+        Preparado para jogar.
+      </p>
+    </section>
+  </main>
+
+  <section id="game-container" aria-label="Emulador">
+    <div id="game"></div>
+
+    <div id="game-toolbar">
+      <button id="menu-button">← Menu</button>
+      <button id="fullscreen-button">⛶ Tela cheia</button>
     </div>
+  </section>
 
-    <div id="game-container">
-        <div id="game"></div>
-    </div>
+  <script>
+    const playButton = document.getElementById("play-button");
+    const statusText = document.getElementById("status");
+    const gameCard = document.getElementById("game-card");
+    const gameContainer = document.getElementById("game-container");
 
-    <script type="text/javascript">
-        // Registro do Service Worker
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('./sw.js')
-                    .then(reg => console.log('SW registrado com sucesso!'))
-                    .catch(err => console.log('Erro ao registrar SW:', err));
-            });
+    let emulatorStarted = false;
+
+    // Registra o Service Worker para cache offline.
+    if ("serviceWorker" in navigator) {
+      window.addEventListener("load", () => {
+        navigator.serviceWorker.register("./sw.js")
+          .then(() => console.log("Kubo Touch: SW registrado"))
+          .catch(error => console.error("SW:", error));
+      });
+    }
+
+    async function startEmulator() {
+      if (emulatorStarted) return;
+
+      playButton.disabled = true;
+      statusText.textContent = "Carregando jogo...";
+
+      try {
+        const romResponse = await fetch("./supermarioland.gb");
+        if (!romResponse.ok) {
+          throw new Error("ROM não encontrada.");
         }
 
-        function startEmulator() {
-            document.getElementById('game-card').style.display = 'none';
-            document.getElementById('game-container').style.display = 'block';
+        emulatorStarted = true;
+        gameCard.style.display = "none";
+        gameContainer.style.display = "block";
 
-            window.EJS_player = '#game';
-            window.EJS_core = 'gb';
-            window.EJS_gameName = 'Super Mario Land';
-            window.EJS_color = '#e74c3c';
-            window.EJS_startOnLoaded = true;
-            
-            // Aponta para a pasta local "data"
-            window.EJS_pathtodata = './data/';
-            window.EJS_gameUrl = 'supermarioland.gb';
+        // Configurações do EmulatorJS antes do loader.
+        window.EJS_player = "#game";
+        window.EJS_core = "gb";
+        window.EJS_gameName = "Super Mario Land";
+        window.EJS_color = "#e74c3c";
+        window.EJS_startOnLoaded = true;
+        window.EJS_pathtodata = new URL("./data/", location.href).href;
+        window.EJS_gameUrl = new URL("./supermarioland.gb", location.href).href;
 
-            // Carrega o loader de forma local
-            var script = document.createElement('script');
-            script.src = './data/loader.js';
-            document.body.appendChild(script);
-        }
-    </script>
+        window.EJS_onGameStart = () => {
+          statusText.textContent = "Jogo iniciado!";
+        };
+
+        window.EJS_onLoad = () => {
+          console.log("Emulador carregado.");
+        };
+
+        window.EJS_onError = error => {
+          console.error("EmulatorJS:", error);
+          statusText.textContent =
+            "Erro ao carregar. Verifique os arquivos do emulador.";
+        };
+
+        const script = document.createElement("script");
+        script.src = "./data/loader.js";
+        script.onload = () => {
+          console.log("Loader EmulatorJS carregado.");
+        };
+        script.onerror = () => {
+          statusText.textContent =
+            "Não foi possível carregar o emulador.";
+          playButton.disabled = false;
+          emulatorStarted = false;
+        };
+
+        document.body.appendChild(script);
+      } catch (error) {
+        console.error(error);
+        statusText.textContent =
+          "Jogo indisponível. Confira se a ROM está na pasta do projeto.";
+        playButton.disabled = false;
+      }
+    }
+
+    playButton.addEventListener("click", startEmulator);
+
+    document.getElementById("menu-button").addEventListener("click", () => {
+      location.reload();
+    });
+
+    document.getElementById("fullscreen-button").addEventListener("click", () => {
+      if (!document.fullscreenElement) {
+        gameContainer.requestFullscreen?.();
+      } else {
+        document.exitFullscreen?.();
+      }
+    });
+  </script>
 </body>
 </html>
+
