@@ -202,12 +202,12 @@
 
     let emulatorStarted = false;
 
-    // Registra o Service Worker para cache offline.
+    // Registo do Service Worker para cache offline completo.
     if ("serviceWorker" in navigator) {
       window.addEventListener("load", () => {
         navigator.serviceWorker.register("./sw.js")
-          .then(() => console.log("Kubo Touch: SW registrado"))
-          .catch(error => console.error("SW:", error));
+          .then(() => console.log("Kubo Touch: SW registado com sucesso"))
+          .catch(error => console.error("Erro no SW:", error));
       });
     }
 
@@ -216,18 +216,18 @@
 
       emulatorStarted = true;
       playButton.disabled = true;
-      statusText.textContent = "Carregando jogo...";
+      statusText.textContent = "A carregar o jogo...";
 
       gameCard.style.display = "none";
       gameContainer.style.display = "block";
 
-      // Configurações corrigidas do EmulatorJS apontando para o nome exato da ROM
+      // Configurações do EmulatorJS para caminhos locais (offline)
       window.EJS_player = "#game";
       window.EJS_core = "gb";
       window.EJS_gameName = "Super Mario Land";
       window.EJS_color = "#e74c3c";
       window.EJS_startOnLoaded = true;
-      window.EJS_pathtodata = "https://cdn.emulatorjs.org/stable/data/";
+      window.EJS_pathtodata = "./data/";
       window.EJS_gameUrl = "./supermarioland.gb";
 
       window.EJS_onGameStart = () => {
@@ -235,9 +235,9 @@
       };
 
       const script = document.createElement("script");
-      script.src = "https://cdn.emulatorjs.org/stable/data/loader.js";
+      script.src = "./data/loader.js";
       script.onerror = () => {
-        statusText.textContent = "Erro ao carregar o emulador.";
+        statusText.textContent = "Erro ao carregar os ficheiros locais do emulador.";
         playButton.disabled = false;
         emulatorStarted = false;
         gameCard.style.display = "block";
