@@ -1,30 +1,36 @@
-const CACHE_NAME = 'kubo-touch-sml-v1';
-const ASSETS_TO_CACHE = [
+const CACHE_NAME = 'kubo-touch-mario-v1';
+const urlsToCache = [
   './',
   './index.html',
+  './manifest.json',
   './gb_supermarioland.jpg',
   './supermarioland.gb',
   './data/loader.js',
-  './manifest.json'
+  'https://cdn.emulatorjs.org/stable/data/loader.js'
 ];
 
-self.addEventListener('install', (event) => {
+// Instalação do Service Worker e armazenamento em cache inicial
+self.addEventListener('install', event => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => {
-      // Adiciona arquivos locais básicos
-      return cache.addAll(ASSETS_TO_CACHE);
-    })
+    caches.open(CACHE_NAME)
+      .then(cache => {
+        console.log('Kubo Touch: Cache aberto com sucesso');
+        return cache.addAll(urlsToCache);
+      })
+      .catch(err => console.log('Erro ao fazer cache dos recursos:', err))
   );
   self.skipWaiting();
 });
 
-self.addEventListener('activate', (event) => {
+// Ativação e limpeza de caches antigos
+self.addEventListener('activate', event => {
   event.waitUntil(
-    caches.keys().then((cacheNames) => {
+    caches.keys().then(cacheNames => {
       return Promise.all(
-        cacheNames.map((cache) => {
-          if (cache !== CACHE_NAME) {
-            return caches.delete(cache);
+        cacheNames.map(cacheName => {
+          if (cacheName !== CACHE_NAME) {
+            console.log('Removendo cache antigo:', cacheName);
+            return caches.delete(cacheName);
           }
         })
       );
@@ -33,23 +39,27 @@ self.addEventListener('activate', (event) => {
   self.clients.claim();
 });
 
-self.addEventListener('fetch', (event) => {
+// Interceção de requisições para funcionamento offline
+self.addEventListener('fetch', event => {
   event.respondWith(
-    caches.match(event.request).then((cachedResponse) => {
-      if (cachedResponse) {
-        return cachedResponse;
-      }
-      return fetch(event.request).then((response) => {
-        // Armazena novos arquivos baixados dinamicamente (ex: arquivos da pasta /data/)
-        if (!response || response.status !== 200 || response.type !== 'basic') {
+    caches.match(event.request)
+      .then(response => {
+        // Retorna do cache se encontrar, senão busca na rede
+        if (response) {
           return response;
         }
-        const responseToCache = response.clone();
-        caches.open(CACHE_NAME).then((cache) => {
-          cache.put(event.request, responseToCache);
+        return fetch(event.request).then(networkResponse => {
+          return caches.open(CACHE_NAME).then(cache => {
+            // Guarda dinamicamente novos ficheiros solicitados (como os cores do emulador)
+            cache.put(event.request, networkResponse.clone());
+            return networkResponse;
+          });
+        }).catch(() => {
+          // Fallback caso esteja offline e o recurso não esteja no cache
+          if (event.request.destination === 'document') {
+            return caches.match('./index.html');
+          }
         });
-        return response;
-      });
-    })
+      })
   );
 });
