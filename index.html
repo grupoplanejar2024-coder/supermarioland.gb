@@ -211,7 +211,7 @@
       });
     }
 
-    function startEmulator() {
+function startEmulator() {
       if (emulatorStarted) return;
 
       emulatorStarted = true;
@@ -221,7 +221,7 @@
       gameCard.style.display = "none";
       gameContainer.style.display = "block";
 
-    // Configuração apontando para o CDN oficial estável do EmulatorJS
+      // Configuração estável via CDN oficial para evitar falhas de carregamento em telemóveis
       window.EJS_player = "#game";
       window.EJS_core = "gb";
       window.EJS_gameName = "Super Mario Land";
@@ -237,7 +237,7 @@
       const script = document.createElement("script");
       script.src = "https://cdn.emulatorjs.org/stable/data/loader.js";
       script.onerror = () => {
-        statusText.textContent = "Erro ao carregar os ficheiros locais do emulador.";
+        statusText.textContent = "Erro ao carregar o emulador.";
         playButton.disabled = false;
         emulatorStarted = false;
         gameCard.style.display = "block";
